@@ -29,7 +29,7 @@ jobs:
           at: /tmp/output
       - run:
           name: Upload to s3
-          command: aws s3 sync $SOURCE_DIR s3://$S3_BUCKET/s/ --delete
+          command: aws s3 sync $SOURCE_DIR s3://$S3_BUCKET/s/ --delete --acl public-read
   invalidate:
     <<: *defaults
     docker:
