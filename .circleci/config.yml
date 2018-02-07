@@ -1,7 +1,7 @@
 defaults: &defaults
   working_directory: /tmp/output
   docker:
-    - image: grahamgilbert/blog-build@sha256:008eb268fd49391637393ac1811b3f257b0f48ac3048a748fe6032c9b72e06d9
+    - image: grahamgilbert/shorty:latest
   environment:
     - SOURCE_DIR: /tmp/output/_site
     - S3_BUCKET: grahamat
