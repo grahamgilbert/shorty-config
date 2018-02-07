@@ -1,0 +1,55 @@
+defaults: &defaults
+  working_directory: /tmp/output
+  docker:
+    - image: grahamgilbert/blog-build@sha256:008eb268fd49391637393ac1811b3f257b0f48ac3048a748fe6032c9b72e06d9
+  environment:
+    - SOURCE_DIR: /tmp/output/_site
+    - S3_BUCKET: grahamat
+    - S3_REGION: us-east-1
+  
+version: 2
+jobs:
+  build:
+    <<: *defaults
+    steps:
+      - checkout
+      - run:
+          name: build site
+          command: /usr/local/bin/shorty -c /tmp/output/config.json -o $SOURCE_DIR -g $GOOGLEID
+      - persist_to_workspace:
+          root: /tmp/output
+          paths:
+            - '_site'
+  deploy:
+    <<: *defaults
+    docker:
+       - image: grahamgilbert/awscli@sha256:f885d8ea981fd0b44d119a3d85c6994274b6cf93b05f6f3a883cc8c656ba3763
+    steps:
+      - attach_workspace:
+          at: /tmp/blog
+      - run:
+          name: Upload to s3
+          command: aws s3 sync $SOURCE_DIR s3://$S3_BUCKET/s/ --delete
+  invalidate:
+    <<: *defaults
+    docker:
+      - image: grahamgilbert/awscli@sha256:f885d8ea981fd0b44d119a3d85c6994274b6cf93b05f6f3a883cc8c656ba3763
+    steps:
+      - run: aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_ID --paths /
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
+      - invalidate:
+            requires:
+              - deploy
+            filters:
+              branches:
+                only: master
