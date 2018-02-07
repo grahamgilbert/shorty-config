@@ -26,7 +26,7 @@ jobs:
        - image: grahamgilbert/awscli@sha256:f885d8ea981fd0b44d119a3d85c6994274b6cf93b05f6f3a883cc8c656ba3763
     steps:
       - attach_workspace:
-          at: /tmp/blog
+          at: /tmp/output
       - run:
           name: Upload to s3
           command: aws s3 sync $SOURCE_DIR s3://$S3_BUCKET/s/ --delete
