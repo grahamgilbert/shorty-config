@@ -6,5 +6,9 @@
     {
         "stub": "crypt",
         "url": "https://github.com/grahamgilbert/crypt"
+    },
+    {
+        "stub": "november",
+        "url": "https://mobro.co/13753514"
     }
 ]
