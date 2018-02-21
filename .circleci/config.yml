@@ -1,7 +1,7 @@
 defaults: &defaults
   working_directory: /tmp/output
   docker:
-    - image: quay.io/grahamgilbert/shorty@sha256:26f321f8a6def6be9cc4b1a818cad1c38995cfb885b2e811cc51e423e69646c2
+    - image: grahamgilbert/shorty:1.0.0
   environment:
     - SOURCE_DIR: /tmp/output/_site
     - S3_BUCKET: grahamat
