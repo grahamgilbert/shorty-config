@@ -1,7 +1,7 @@
 defaults: &defaults
   working_directory: /tmp/output
   docker:
-    - image: grahamgilbert/shorty:1.0.0
+    - image: grahamgilbert/shorty:1.0.1
   environment:
     - SOURCE_DIR: /tmp/output/_site
     - S3_BUCKET: grahamat
