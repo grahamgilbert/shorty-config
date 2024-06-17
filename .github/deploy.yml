@@ -31,7 +31,7 @@ jobs:
           aws-region: us-east-1
 
       - name: Upload to S3
-        run: aws s3 sync /tmp/output/_site s3://grahamat/ --delete --acl public-read
+        run: aws s3 sync /tmp/_site s3://grahamat/ --delete --acl public-read
       
       - name: Create CloudFront invalidation
         run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_ID }} --paths /
