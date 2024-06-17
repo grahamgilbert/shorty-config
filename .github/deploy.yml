@@ -21,13 +21,11 @@ jobs:
         uses: actions/checkout@master
         with:
           repository: grahamgilbert/shorty
-          sparse-checkout: |
-            README.md
-          sparse-checkout-cone-mode: false
+          path: shorty
 
       - name: Run shorty
         run: |
-          python3 shorty.py -c config.json -o /tmp/_site
+          python3 shorty/shorty.py -c config.json -o /tmp/_site
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
