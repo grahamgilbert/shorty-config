@@ -25,7 +25,7 @@ jobs:
             README.md
           sparse-checkout-cone-mode: false
 
-      - name: Build site
+      - name: Run shorty
         run: |
           python3 shorty.py -c config.json -o /tmp/_site
 
