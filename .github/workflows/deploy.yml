@@ -1,6 +1,9 @@
 name: Build, Deploy, and Invalidate
 
-on: [workflow_dispatch]
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   deploy:
