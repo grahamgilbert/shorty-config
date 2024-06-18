@@ -24,11 +24,11 @@ jobs:
           python3 shorty/shorty.py -c config.json -o /tmp/_site
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
+        run: |
+          aws configure set region "us-east-1"
+          aws --profile default configure set aws_access_key_id "${{ secrets.AWS_ACCESS_KEY_ID }}"
+          aws --profile default configure set aws_secret_access_key "${{ secrets.AWS_SECRET_ACCESS_KEY }}"
+          aws sts get-caller-identity >/dev/null 2>&1
 
       - name: Upload to S3
         run: aws s3 sync /tmp/_site s3://grahamat/ --delete --acl public-read
