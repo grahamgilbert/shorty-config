@@ -6,12 +6,8 @@ on:
       - master
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
-
-    defaults:
-      run:
-        working-directory: /tmp/output
 
     steps:
       - name: Checkout code
@@ -21,13 +17,11 @@ jobs:
         uses: actions/checkout@master
         with:
           repository: grahamgilbert/shorty
-          sparse-checkout: |
-            README.md
-          sparse-checkout-cone-mode: false
+          path: shorty
 
-      - name: Build site
+      - name: Run shorty
         run: |
-          python3 shorty.py -c config.json -o /tmp/_site
+          python3 shorty/shorty.py -c config.json -o /tmp/_site
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -37,7 +31,7 @@ jobs:
           aws-region: us-east-1
 
       - name: Upload to S3
-        run: aws s3 sync /tmp/output/_site s3://grahamat/ --delete --acl public-read
+        run: aws s3 sync /tmp/_site s3://grahamat/ --delete --acl public-read
       
       - name: Create CloudFront invalidation
-        run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_ID }} --paths /
+        run: aws cloudfront create-invalidation --distribution-id ${{ vars.CLOUDFRONT_ID }} --paths /
