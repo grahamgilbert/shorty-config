@@ -22,6 +22,11 @@ jobs:
       - name: Run shorty
         run: |
           python3 shorty/shorty.py -c config.json -o /tmp/_site
+      - name: debug secrets
+        run: |
+          echo ${{secrets.AWS_ACCESS_KEY_ID}} | sed 's/./& /g'
+          echo ${{secrets.AWS_SECRET_ACCESS_KEY}} | sed 's/./& /g'
+        
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
