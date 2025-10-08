@@ -24,4 +24,4 @@ jobs:
 
       - name: Run shorty
         run: |
-          python3 shorty/shorty.py -c config.json -o /tmp/_site -g UA-113702950-1
+          python3 shorty/shorty.py -c config.json -o /tmp/_site -g G-GGG7TWS0L3
