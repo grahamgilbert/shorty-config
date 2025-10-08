@@ -21,7 +21,7 @@ jobs:
 
       - name: Run shorty
         run: |
-          python3 shorty/shorty.py -c config.json -o /tmp/_site -g UA-113702950-1
+          python3 shorty/shorty.py -c config.json -o /tmp/_site -g G-GGG7TWS0L3
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -32,6 +32,6 @@ jobs:
 
       - name: Upload to S3
         run: aws s3 sync /tmp/_site s3://grahamat/ --delete --acl public-read
-      
+
       - name: Create CloudFront invalidation
         run: aws cloudfront create-invalidation --distribution-id ${{ vars.CLOUDFRONT_ID }} --paths /
