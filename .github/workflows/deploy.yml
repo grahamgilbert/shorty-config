@@ -11,20 +11,40 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Checkout shorty
-        uses: actions/checkout@master
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: grahamgilbert/shorty
           path: shorty
+
+      - name: Set up Python
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version-file: shorty/.python-version
+          check-latest: true
 
       - name: Run shorty
         run: |
           python3 shorty/shorty.py -c config.json -o /tmp/_site -g G-NBC9BQP2CM
 
+      - name: Set up AWS CLI
+        env:
+          AWS_CLI_VERSION: '2.39.6'
+        run: |
+          curl --fail --silent --show-error --location --retry 3 \
+            "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWS_CLI_VERSION}.zip" \
+            -o "$RUNNER_TEMP/awscliv2.zip"
+          unzip -q "$RUNNER_TEMP/awscliv2.zip" -d "$RUNNER_TEMP/awscli-installer"
+          "$RUNNER_TEMP/awscli-installer/aws/install" \
+            --install-dir "$RUNNER_TEMP/aws-cli" \
+            --bin-dir "$RUNNER_TEMP/aws-cli-bin"
+          echo "$RUNNER_TEMP/aws-cli-bin" >> "$GITHUB_PATH"
+          "$RUNNER_TEMP/aws-cli-bin/aws" --version
+
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
